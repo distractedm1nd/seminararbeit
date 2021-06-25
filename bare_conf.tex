@@ -1,55 +1,5 @@
-
 %% bare_conf.tex
 %% V1.3
-%% 2007/01/11
-%% by Michael Shell
-%% See:
-%% http://www.michaelshell.org/
-%% for current contact information.
-%%
-%% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.7 or later) with an IEEE conference paper.
-%%
-%% Support sites:
-%% http://www.michaelshell.org/tex/ieeetran/
-%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
-%% and
-%% http://www.ieee.org/
-
-%%*************************************************************************
-%% Legal Notice:
-%% This code is offered as-is without any warranty either expressed or
-%% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
-%% User assumes all risk.
-%% In no event shall IEEE or any contributor to this code be liable for
-%% any damages or losses, including, but not limited to, incidental,
-%% consequential, or any other damages, resulting from the use or misuse
-%% of any information contained here.
-%%
-%% All comments are the opinions of their respective authors and are not
-%% necessarily endorsed by the IEEE.
-%%
-%% This work is distributed under the LaTeX Project Public License (LPPL)
-%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
-%% distributed and modified. A copy of the LPPL, version 1.3, is included
-%% in the base LaTeX documentation of all distributions of LaTeX released
-%% 2003/12/01 or later.
-%% Retain all contribution notices and credits.
-%% ** Modified files should be clearly indicated as such, including  **
-%% ** renaming them and changing author support contact information. **
-%%
-%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
-%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
-%%*************************************************************************
-
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. IEEE's font choices can trigger bugs that do  ***
-% *** not appear when using other class files.                            ***
-% The testflow support page is at:
-% http://www.michaelshell.org/tex/testflow/
-
 
 
 % Note that the a4paper option is mainly intended so that authors in
@@ -63,47 +13,12 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[conference]{IEEEtran}
-% Add the compsoc option for Computer Society conferences.
-%
-% If IEEEtran.cls has not been installed into the LaTeX system files,
-% manually specify the path to it like:
-% \documentclass[conference]{../sty/IEEEtran}
-
-
-
-
-
-% Some very useful LaTeX packages include:
-% (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
-
+\documentclass[a4paper,conference]{IEEEtran}
 
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of IEEE. Loading the cite package will
@@ -127,12 +42,12 @@
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
+   \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
+   \graphicspath{{./}}
   % and their extensions so you won't have to specify these with
   % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
 \else
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
@@ -144,115 +59,32 @@
   % every instance of \includegraphics
   % \DeclareGraphicsExtensions{.eps}
 \fi
-% graphicx was written by David Carlisle and Sebastian Rahtz. It is
-% required if you want graphics, photos, etc. graphicx.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at: 
-% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
-% Another good source of documentation is "Using Imported Graphics in
-% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
-% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
-%
-% latex, and pdflatex in dvi mode, support graphics in encapsulated
-% postscript (.eps) format. pdflatex in pdf mode supports graphics
-% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
-% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
-% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
-% which can result in "jaggedy"/blurry rendering of lines and letters as
-% well as large increases in file sizes.
-%
-% You can find documentation about the pdfTeX application at:
-% http://www.tug.org/applications/pdftex
 
 
 
 
-
-% *** MATH PACKAGES ***
-%
-%\usepackage[cmex10]{amsmath}
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics. If using
-% it, be sure to load this package with the cmex10 option to ensure that
-% only type 1 fonts will utilized at all point sizes. Without this option,
-% it is possible that some math symbols, particularly those within
-% footnotes, will be rendered in bitmap form which will result in a
-% document that can not be IEEE Xplore compliant!
-%
-% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
+\usepackage[cmex10]{amsmath}
 
 
 
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
-% There is also a support site at:
-% http://algorithms.berlios.de/index.html
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
+\usepackage{algorithmic}
 
 
 
 
 % *** ALIGNMENT PACKAGES ***
 %
-%\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/tools/
+\usepackage{array}
 
 
-%\usepackage{mdwmath}
-%\usepackage{mdwtab}
-% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
-% especially mdwmath.sty and mdwtab.sty which are used to format equations
-% and tables, respectively. The MDWtools set is already installed on most
-% LaTeX systems. The lastest version and documentation is available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
-
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-%\usepackage{eqparbox}
-% Also of notable interest is Scott Pakin's eqparbox package for creating
-% (automatically sized) equal width boxes - aka "natural width parboxes".
-% Available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
-
+\usepackage{mdwmath}
+\usepackage{mdwtab}
 
 
 
 
 % *** SUBFIGURE PACKAGES ***
-%\usepackage[tight,footnotesize]{subfigure}
+\usepackage[tight,footnotesize]{subfigure}
 % subfigure.sty was written by Steven Douglas Cochran. This package makes it
 % easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
 % work, it is a good idea to load it with the tight package option to reduce
@@ -264,8 +96,8 @@
 
 
 
-%\usepackage[caption=false]{caption}
-%\usepackage[font=footnotesize]{subfig}
+\usepackage[caption=false]{caption}
+\usepackage[font=footnotesize]{subfig}
 % subfig.sty, also written by Steven Douglas Cochran, is the modern
 % replacement for subfigure.sty. However, subfig.sty requires and
 % automatically loads Axel Sommerfeldt's caption.sty which will override
@@ -287,7 +119,7 @@
 
 % *** FLOAT PACKAGES ***
 %
-%\usepackage{fixltx2e}
+\usepackage{fixltx2e}
 % fixltx2e, the successor to the earlier fix2col.sty, was written by
 % Frank Mittelbach and David Carlisle. This package corrects a few problems
 % in the LaTeX2e kernel, the most notable of which is that in current
@@ -335,8 +167,6 @@
 
 
 
-
-
 % *** Do not adjust lengths that control margins, column widths, etc. ***
 % *** Do not use packages that alter fonts (such as pslatex).         ***
 % There should be no need to do such things with IEEEtran.cls V1.6 and later.
@@ -358,7 +188,7 @@
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Ryan Ford}
+\author{\IEEEauthorblockN{Ryan Quinn Ford}
 \IEEEauthorblockA{Philipps-University Marburg, Germany \\
 Department of Mathematics and Computer Science, Distributed Systems Group \\
 Email: ford@informatik.uni-marburg.de
@@ -401,7 +231,7 @@ Email: ford@informatik.uni-marburg.de
 
 \begin{abstract}
 %\boldmath
-With the global amount of data growing at a speed which current storage technologies cannot hold pace with, researchers have looked to DNA for a novel storage solution. DNA provides an unprecedented data density and long-term durability, which is now being actualized for data storage thanks to ever-decreasing sequencing costs. Due to very low read speeds and delicate conditions, it is of significant importance to find ways to more efficiently randomly access data in a DNA store, e.g. retrieving values from keys. In this paper I discuss two current techniques for random access in DNA storage and their capibilities and outlook in regards to scalability and error correction/detection. In addition, I will take a look at the current limitations that face these techniques and what areas they open up to future research.
+With the global amount of data growing at a speed which current storage technologies cannot hold pace with, researchers have looked to DNA for a novel storage solution. DNA provides an unprecedented data density and long-term durability, which is now being actualized for data storage thanks to ever-decreasing sequencing costs. Due to very low read speeds and delicate conditions, it is of significant importance to find ways to more efficiently randomly access data in a DNA store, e.g. retrieving values from keys. In this paper I discuss two current techniques for random access in DNA storage and their capabilities and outlook in regards to scalability and error correction/detection. In addition, I will take a look at the current limitations that face these techniques and what areas they open up to future research.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -431,20 +261,103 @@ With the global amount of data growing at a speed which current storage technolo
 % no \IEEEPARstart
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-% TODO: "Motivational speech" about why we want DNA storage!!
-In order to understand the current DNA storage techniques and their limitations, it is necessary to touch upon some underlying biological principles as well as concepts from information science and database systems. The following sections will go over both, which will give us the terminology we need to achieve a deeper understanding of the biochemical and information theoretical constraints that apply.
+In order to understand the current DNA storage techniques and their limitations, it is necessary to touch upon some underlying biological principles as well as necessary concepts from information science and database systems. The following sections will go over both, which will give us the terminology we need to achieve a deeper understanding of the biochemical and information theoretical constraints that apply. A high-level overview explaining the interest behind this research topic follows, before the details are discussed.
+
+\subsection{High-Level Overview and Reasoning}
+There exist a multitude of properties of DNA rendering it as an innovative candidate for data storage, which has led it to become a heavily researched topic over the past decade. The amount of stored data in the world is growing at a rate of 30\% to 40\% a year \cite{globaldatagrowth}, outpacing the growth of today's current storage medium's capabilities. As a result, researchers have recently looked towards new mediums to remedy this problem. DNA sequencing and accompanying technologies have experienced significant cost reduction in past years, making DNA an increasingly attractive medium for the future. 
+
+To understand the appeal, one can first contemplate the theoretical bounds for storage data in a DNA molecule.  An estimate of the information capacity considering reasonable encoding constraints is 1.83 bits per nucleotide \cite{1}, which may sound uninteresting as a storage medium until the physical size of this structure is considered.  A single base pair has a mass of about 330g/mol \cite{2}, which results in a storage capacity of 137.76 zettabytes per gram. This is an improvement of many orders of magnitude over current long term storage mediums, such as magnetic tape \cite{?}.\\
+
+Another appealing aspect of DNA storage is it's robustness. With a half life of 521 years \cite{dnahalflife}, a DNA strand will persist for around 6.8 million years. The current best option for long term data storage is magnetic tape, which, must be replaced around every 10 years.
+
+%{dnahalflife}https://royalsocietypublishing.org/doi/10.1098/rspb.2004.3016
 
 %\hfill mds
  
 %\hfill January 11, 2007
 
 \subsection{Underlying Biological Concepts}
-%The following section discusses the basic principles of the storage medium we are dealing with.
-Deoxyribonucleic Acid, more commonly referred to as \textbf{DNA}, is our target storage medium. This molecule is the carrier of genetic information in all living beings, and is comprised of four chemical building blocks called \textbf{nucleotides}. These nucleotides, also called bases, are named Adenine, Thynine, Guanine, and Cytosine, and are abbreviated as A, T, G, and C, respectively. The primary structure of the DNA Molecule is a double-helix, discovered by Watson and Crick in \textbf{TODO}. In this structure, the nucleotides pair with each other in two of the canonical pairings, called \textbf{base pairs} (bps). Adenine pairs with Thynine, and Guanine pairs with Cytosine.   
+
+\begin{center}
+\includegraphics[width=2in]{dna}
+\end{center}
+
+
+\subsubsection{DNA Basics}
+Deoxyribonucleic Acid, more commonly referred to as \textbf{DNA}, is the carrier of genetic information in all living beings and our storage medium of interest. A strand of DNA is comprised of four chemical building blocks called \textbf{nucleotides} which occur sequentially in a strand, connected by a sugar-phosphate backbone. Such a strand of nucleotides is commonly referred to as an \textbf{oligo}, short for oligonucleotide.
+
+Each DNA strand has two chemically distinct ends, called 5' and 3', and is made up of nucleotides, also called \textbf{bases}, which are named Adenine, Thymine, Guanine, and Cytosine, and are abbreviated as A, T, G, and C, respectively. Each pairing in a DNA molecule is called a \textbf{base pair} (bp). In these canonical base pairings, Adenine pairs with Thymine, and Guanine pairs with Cytosine. A strand's reverse complement is defined as its sequence of complementary base pairs and swapped 3' and 5' ends.
+
+The primary structure of a DNA molecule is a double-helix, discovered by Watson and Crick in \cite{3}. In this structure, two reversely complementary strands bind to each other in a "twisted ladder" formation, where each nucleotide on one side forms a hydrogen bond with the one on the opposing side in one of two of the canonical pairings. Two binded, complementary strands can be referred to as ds-DNA (doubly stranded DNA), while a single strand can be referred to as ss-DNA (singly stranded DNA).
+
+
+
+\subsubsection{Properties relevant to error proneness}
+DNA is a living molecule, so it is unwise to map data to it without first taking some biochemical limitations into consideration. One of such limitations stems from \textbf{homopolymers}, regions of a strand which solely consist of repetitions of a single base. It is of critical importance to avoid such homopolymers in the encoding process, as they render a strand more error prone \cite{?} and unstable.
+
+Another important property of a DNA strand is its \textbf{GC Content}, which is defined as the ratio of Guanine and Cytosine bases to the total count of bases in the strand. Having a reasonable GC Content \cite{?} is important to the strand's stability. Oligonucleotides, which will be referred to in later sections as \textbf{oligos}, are simply short DNA sequences of around 100 bases.
+
+Yet another relevant issue is the formation of secondary structures. Secondary structures form when a DNA strand binds to itself or another semi-complementary strand in an undesirable way.
+
+\subsection{DNA in storage}
+A container of solution containing ds-DNA molecules is called a DNA pool. Most often, the entirety of the data is not stored in a single container, but rather divided up into many DNA pools in order to avoid the aforementioned conflicts, especially undesirable binding to incorrect data fragments.
+
+\subsection{Random Access}
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{randomaccess}
+\caption{Random Access}
+\label{randomaccess}
+\end{figure}
+
+Random (direct) access in a storage system implies the ability to access all data fragments in any arbitrary order. The most basic form of random access in a DNA library comes from the separation of files into fragments, which all receive a distinct primer it can be identified by. Because this primer is stored in-silico, one can re-amplify the solution containing a specific DNA fragment on retrieval, effectively directly accessing the desired data. Nonetheless, primer design is a delicate task and the amount of primers that can be used is severely limited. This is partially alleviated by separation of a dataset into $n$ physically separated DNA pools, allowing reuse of the primers and linearly scaling direct access capability.
+
+
+
+%[1] https://www.biorxiv.org/content/10.1101/074237v3.full.pdf
+%[2] https://www.sciencedirect.com/science/article/abs/pii/S0022283662801004?via%3Dihub
 
 %\subsubsection{Deoxyribonucleic Acid}
 %Subsubsection text here.
 
+
+\subsection{Encoding Data into DNA}
+In order to store data into a DNA strand, one must first consider how the data gets mapped to the four available bases. On first glance, one could try assigning each of the four bases a two bit sequence, for example A=00, C=01, T=10, G=11. This simple mapping would mean a byte like 01100011 would get transformed into the base sequence CTAG. Depending on the data format, regions of the binary representation may often repeat itself heavily. If one were to map two bits per base naively as described, this would result in highly error prone strands due to extreme GC Content and long homopolymer regions, among other issues. For these reasons, two main operations are performed on the data in the majority of previous work.
+
+\subsubsection{Rotating Huffman Code}
+First, the data is compressed using Huffman coding as seen in \ref{code}. In Huffman coding, a byte sequence is separated into $n$-ary sequences and the relative frequencies of each sequence is calculated. In our case, we use triplets of bits. A binary tree is then generated assigning more probable triplets codes of shorter length in order to store the data more efficiently. This alone, however, does not remedy the problem of repetitive regions. For this, a rotating code is used, which simply ensures that the same base is never repeated more than once. This is achieved by not only choosing the base based on the ternary digit from the Huffman code, but also based on the previous nucleotide.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{code}
+\caption{Rotating Huffman Code}
+\label{code}
+\end{figure}
+
+\subsubsection{Erasure Codes}
+Due to high error rates when reading the DNA, there must be some redundancy to ensure the data is properly recovered. This is commonly implemented with erasure codes, in which the data sequence is transformed into a longer sequence which can be successfully decoded with only a subset of the characters from the encoding. In current DNA libraries, the redundancy parameter is tuned relatively high \cite{}, which significantly reduces the achieved information density. As sequencing technology improves, the redundancy parameter should be able to be tuned down \cite{} due to lower read errors and improved encoding schemes which are aware of and avoid secondary structure formation.
+
+\subsubsection{Secondary Structure}
+Secondary structure formation is another cause of error prone sequences. When the encoded DNA is encoded in such away so that two regions of the same sequence can bind to each other, or when a sequence has a high enough similarity to the reverse complement of a different sequence, undesirable bonds can form that will restrict the ability to work with the DNA library.
+
+
+\subsection{PCR}
+After the data has been mapped to a DNA strand, it is time to synthesize the sequences and prepare them for storage. One aspect of this preparation often involves PCR (Polymerase Chain Reaction), in which each DNA sequence is multiplied millions of times. TODO: Why is this amplification necessary? In this process, after the data has been mapped to the four nucleotides as discussed above, a so-called primer is appended to the sequence. This primer will serve as a marker of the region to be copied by an enzyme called a DNA Polymerase. This copying, called amplification, is a cycle involving the following steps.
+
+\subsubsection{Denaturation}
+In a process called denaturation, DNA molecules are split up into its two complementary strands by being heated to a target temperature $T_m$, called the \textit{melting point}. This melting point is defined as the temperature where 50\% of the DNA strands separate. This happens because the heat breaks the hydrogen bonds holding the two strands together. This step is necessary in order to allow the complementary primer sequences to attach to each strand. 
+\subsubsection{Annealing}
+Once the DNA molecules are split, the environment is cooled back down in a process called annealing. Since the strands are not bonded anymore, there is room for the primer sequences to bond to the complementary primer regions we appended to our data-holding DNA strand.
+\subsubsection{Extension}
+The DNA polymerase enzyme now finds the primers added in the last step, and recreates the double-helix by adding free nucleotides one by one.
+\subsubsection{Repetition}
+Now that the polymerase has recreated the original double-helix, the process can cycle, restarting at the denaturation step. The number of copies doubles with each step.
+
+\subsection{Nanopore Sequencing}
+
+\subsection{Basic Random Access}
+In many previous works \cite{} basic random access was achieved by separating the database into $n$ DNA pools, each with a given amount $k$ of amplified DNA fragments. Each of the $k$ fragments has a unique primer that was used for PCR amplification, so this is what is used as a key to later retrieve the correct fragment. The main restriction with this approach is the amount of possible primers. Because there are typically around a maximum of 10 primers per DNA pool, you can only address $10n$ distinct data fragments. In addition, the mapping of key-value pairs must be stored in-silico for later retrieval. 
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -459,15 +372,12 @@ Deoxyribonucleic Acid, more commonly referred to as \textbf{DNA}, is our target 
 % option should be used if it is desired that the figures are to be
 % displayed while in draft mode.
 %
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation Results}
-%\label{fig_sim}
-%\end{figure}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.5in]{pcr}
+\caption{PCR Stages}
+\label{fig_sim}
+\end{figure}
 
 % Note that IEEE typically puts floats only at the top, even when this
 % results in a large percentage of a column being occupied by floats.
@@ -521,18 +431,15 @@ Deoxyribonucleic Acid, more commonly referred to as \textbf{DNA}, is our target 
 %\end{table}
 
 
-% Note that IEEE does not put floats in the very first column - or typically
-% anywhere on the first page for that matter. Also, in-text middle ("here")
-% positioning is not used. Most IEEE journals/conferences use top floats
-% exclusively. Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the \fnbelowfloat
-% command of the stfloats package.
+\section{Some Random Access Methods}
+This section will cover some of the previous implementations of random access in DNA libraries.
 
-
-
+\subsection{Random Access in large-scale DNA storage}
+In \cite{}, Organick et. al. encoded and stored over 200MB of data spanning across 35 distinct files, each of which were recovered individually and without errors using random access. The DNA library consisted of more than 13 million DNA oligos in total. They encoded each digital file into megabyte sized blocks, represented by a matrix $M$ with ten rows and 55k columns. Each cell of this matrix contains 2 bytes. Each row of the matrix was encoded with a Reed-Solomon code, which is a common erasure code, resulting in a larger matrix with redundancy. Reed-Solomon codes consist of an inner and outer code, giving an extra layer of redundancy, which is itself tunable to a certain degree. In order to minimize orthogonality with similar data fragments, they performed an XOR on the bit sequence with a psuedorandom sequence seeded on a recoverable property of the data, so it is able to be decoded later.
+\subsection{Paper 2}
+In \cite{}, Lin et. al. took a different approach to random access, which they named DORIS. A header is appended to the sequence containing a file address and a T7 promoter. The file address is used for random access, which is carried out by proteins that react to the T7 promoter in the DNA pool. In contrast to using primers for random access, DORIS uses these T7 promoters which not only allow for nondestructive reads, but also for additional file operations that are not supported in other works, such as locking, unlocking, renaming, and deleting. 
 \section{Conclusion}
-The conclusion goes here.
-
+The presented techniques for achieving random access in DNA storage libraries have brought forth new research problems bringing us closer to the theoretical bound of data we can store in a DNA molecule.
 
 
 
