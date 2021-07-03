@@ -76,7 +76,7 @@
 
 \usepackage{mdwmath}
 \usepackage{mdwtab}
-
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
 
 
@@ -228,7 +228,7 @@ Email: ford@informatik.uni-marburg.de
 
 \begin{abstract}
 %\boldmath
-With the global amount of data growing at a speed that current storage technologies cannot hold pace with, researchers have looked to DNA for a novel storage solution. DNA provides an unprecedented data density and long-term durability, which is now being actualized for data storage thanks to ever-decreasing sequencing costs. However, due to very low read speeds and delicate conditions, it is of significant importance to find ways to more efficiently randomly access data in a DNA store, e.g., retrieving single files from a DNA database. In this paper, three recent breakthroughs in techniques for random access in DNA storage and their capabilities and outlook regarding scalability and error correction/detection are presented. In addition, the current limitations that face these techniques and what areas they open up to future research are discussed.
+With the global amount of data growing at a speed that current storage technologies cannot hold pace with, researchers have looked to DNA for a novel storage solution. DNA provides an unprecedented data density and long-term durability, which is now being actualized for data storage thanks to rapidly decreasing sequencing costs. However, due to very low read speeds and delicate conditions, it is of significant importance to find ways to more efficiently randomly access data in a DNA store, e.g., retrieving single files from a DNA database. Three recent breakthroughs in techniques for random access in DNA storage, their capabilities, potential scalability, and error correction/detection are presented. Additionally, the current limitations and future research opportunities are discussed.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -257,25 +257,18 @@ With the global amount of data growing at a speed that current storage technolog
 
 \subsection{High-Level Overview and Reasoning}
 
-%TODO state first papers suggesting DNA storage%
-
-The amount of stored data in the world is growing at a rate of 30\% to 40\% a year \cite{globaldatagrowth}, outpacing the growth of today's current storage medium's capabilities. Many properties of DNA have led it to be considered a promising candidate for data storage, becoming a heavily researched topic over the past decade.  Moreover, DNA sequencing and accompanying technologies have experienced significant cost reduction \cite{dnabasedarchival} in past years, making DNA an increasingly realistic alternative for the future. 
+The amount of stored data in the world is growing at a rate of 30\% to 40\% per year \cite{globaldatagrowth}, outpacing the growth of today's current storage medium capabilities. Many properties of DNA have led it to be considered a promising candidate for data storage, becoming a heavily researched topic over the past decade.  Moreover, DNA sequencing and accompanying technologies have experienced significant cost reduction \cite{dnabasedarchival} in past years, making DNA an increasingly realistic alternative for the future. 
 
 To understand the appeal, one can first consider the theoretical bounds for data storage density in a DNA molecule. Disregarding encoding constraints and assuming a perfectly efficient encoding of two bits per nucleotide, a single gram of single stranded DNA could contain 450 Exabytes \cite{theoreticaldensity}. A more reasonable estimate of the information capacity taking realistic encoding constraints into account is 1.83 bits per nucleotide \cite{realistictheoreticaldensity}, suggesting a more conservative storage capacity of 416 Exabytes per gram. 
 
 %(1/(330.95/1.83/avogadros constant))/8%
 
-Another appealing aspect of DNA storage is its robustness. With a half-life of 521 years \cite{dnabasedarchival}, a DNA strand will persist for many hundreds of thousands of years. In comparison, the current best option for long-term data storage is magnetic tape, which must be replaced every ten to thirty years \cite{dnabasedarchival}.
+Another appealing aspect of DNA storage is its robust nature. With a half-life of 521 years \cite{dnabasedarchival}, a DNA strand can be stored safely in adverse conditions for many hundreds of thousands of years. In comparison, the current best option for long-term data storage is magnetic tape, which must be replaced every ten to thirty years \cite{dnabasedarchival}.
 
-%TODO talk about the success of small and growing scale dna storage%
+Following the first successes of storing data into DNA \cite{first,theoreticaldensity}, researchers began to scale up DNA storage systems to higher byte capacities \cite{dnabasedarchival}. As this scaled, retrieval from each individual file became more difficult \cite{dnabasedarchival} and the search for random access mechanisms began \cite{pcrbased2}. 
 
-Random access is an essential property of any scalable storage system. Without random access, one would have to read and decode an entire DNA database before reading a single file or data segment. In computer systems, one can use physical addresses of data segments for later access, but in DNA storage, the physical location of the searched strand is unknown. Moreover, the more data fragments are stored, the more difficult it becomes to retrieve them individually. \cite{dnabasedarchival}.
+Random access is an essential property of any scalable storage system. Without random access, one would have to read and decode an entire DNA database before reading a single file or data segment. In computer systems, one can use physical addresses of data segments for later access, but in DNA storage, the physical location of the searched strand is unknown. 
 
-%{dnahalflife}https://royalsocietypublishing.org/doi/10.1098/rspb.2004.3016
-
-%\hfill mds
- 
-%\hfill January 11, 2007
 
 \subsection{Underlying Biological Concepts}
 
@@ -285,9 +278,9 @@ Random access is an essential property of any scalable storage system. Without r
 
 
 \subsubsection{DNA Basics}
-Deoxyribonucleic Acid, more commonly referred to as \textbf{DNA}, is the carrier of genetic information in all living beings and our storage medium of interest. A strand of DNA comprises four chemical building blocks called nucleotides which occur sequentially, connected by a sugar-phosphate backbone. The four nucleotides are also called \textbf{bases} and are named Adenine, Thymine, Guanine, and Cytosine. These are abbreviated as A, T, G, and C, respectively. Each strand has two chemically distinct ends, called 5' and 3'. A short sequence of nucleotides is commonly referred to as an \textbf{oligo}, short for oligonucleotide.
+Before we can discuss encoding schemes and random access mechanisms, a basic understanding of our storage medium of interest is necessary. Deoxyribonucleic Acid, more commonly referred to as \textbf{DNA}, is the carrier of genetic information in all living beings and our storage medium of interest. A strand of DNA comprises four chemical building blocks called nucleotides which occur sequentially, connected by a sugar-phosphate backbone. The four nucleotides are also called \textbf{bases} and are named Adenine, Thymine, Guanine, and Cytosine. These are abbreviated as A, T, G, and C, respectively. Each strand has two chemically distinct ends, called 5' and 3'. A short sequence of these nucleotides is commonly referred to as an \textbf{oligo}, short for oligonucleotide.
 
-In an attempt to minimize their free energy, oligos try to bind to other oligos. This binding is done on the nucleotide level, where there are two canonical base pairings (\textbf{bps}). In these canonical base pairings, Adenine pairs with Thymine, and Guanine pairs with Cytosine. The optimal match for a DNA strand is its \textbf{reverse complement}, which is formed by interchanging each base with its canonical pairing, then reversing the sequence. Two bound, complementary strands can be referred to as \textbf{ds-DNA} (doubly stranded DNA), while a single strand can be referred to as \textbf{ss-DNA} (singly stranded DNA).
+In an attempt to minimize their free energy, oligos try to bind to other oligos. This binding is done on the nucleotide level, where there are two standard base pairings (\textbf{bps}). In these standard base pairings, Adenine pairs with Thymine, and Guanine pairs with Cytosine. The optimal match for a DNA strand is its \textbf{reverse complement}, which is formed by interchanging each base with its standard pairing, then reversing the sequence. Two bound, complementary strands can be referred to as \textbf{ds-DNA} (doubly stranded DNA), while a single strand can be referred to as \textbf{ss-DNA} (singly stranded DNA).
 
 The primary structure of a DNA molecule is a double-helix, discovered by Watson and Crick in \cite{doublehelix}. In this structure, two reversely complementary strands bind to each other in a "twisted ladder" formation, where each nucleotide on one side forms a hydrogen bond with its complement.
 
@@ -295,7 +288,7 @@ The primary structure of a DNA molecule is a double-helix, discovered by Watson 
 
 \textbf{RNA} is another nucleic acid that primarily serves as a messenger between DNA and more functional units of an organism called proteins.
 
-The two essential proteins we cover in this paper are \textbf{RNA-} and \textbf{DNA-polymerase}. Both act upon a region of DNA to create a copy of either itself (in the case of a DNA polymerase) or the corresponding RNA encoding (by the RNA polymerase). For our purposes, it is only relevant to regard a few aspects which set RNA apart from DNA.
+The two essential proteins we cover in this paper are called \textbf{RNA-} and \textbf{DNA-polymerase}. A polymerase is a complex protein that synthesizes sequences of nucleotides. Both act upon a region of DNA to create a copy of either itself (in the case of a DNA polymerase) or the corresponding RNA encoding (by the RNA polymerase). For our discussion, it is only relevant to highlight a few aspects that set RNA apart from DNA.
 
 \begin{itemize}
     \item Thymine is replaced with Uracil as the base-pairing for Adenine, meaning RNA consists of the bases A, U, G, and C.
@@ -303,26 +296,21 @@ The two essential proteins we cover in this paper are \textbf{RNA-} and \textbf{
     \item The RNA polymerase generates RNA from a DNA strand without breaking apart the entire double helix structure at once. The molecule goes down a region of DNA like a zipper, both opening up the DNA and closing it as it travels across.
 \end{itemize}
 
-\subsubsection{Synthesis}
-TODO
+\subsubsection{Synthesis + Sequencing}
+When artificial strands of DNA are put together (written), it is called \textbf{synthesis}. The bases of an existing DNA strand are read out to the computer in a process called \textbf{sequencing}. The two most common sequencing technologies are Illumina and Nanopore sequencing. Nanopore sequencing is becoming more common, but both techniques have high error rates \cite{pcrbased}. Prices continue to drop, and the technology continues to improve (even outpacing Moore's law \cite{dnabasedarchival}), but for now, error-free sequencing is only possible with both high logical (through encoding schemes) and physical (with backups) redundancy.
 
-\subsubsection{Sequencing}
-DNA's bases are read in a process called sequencing. The two most common sequencing technologies are Illumina and Nanopore sequencing. Nanopore sequencing is becoming more common, but both techniques have high error rates \cite{pcrbased}. Prices continue to drop, and the technology continues to improve, but for now, error-free sequencing is only possible with both high logical and physical redundancy.
-
-%TODO: Write about how it is outpacing moores law%
-
-\subsection{Biochemical Limitations Leading to Errors}
-While DNA is a robust molecule when it contains biological information, one must first consider some biochemical limitations before encoding artificial data in it. This is because information encoded into living organisms has been shaped by evolution for millions of years, minimizing the following restrictions through large scale trial and error. Encoding schemes must explicitly take these limitations into account to create usable DNA storage. \\
+\subsection{Biochemical Restrictions}
+While DNA is a robust molecule when it contains biological information, one must first consider some biochemical restrictions before encoding artificial data in it. This is because information encoded into living organisms has been shaped by large scale trial and error \cite{dnaevolution} to minimize error probability and create robust encodings. Man-made encoding schemes must explicitly take these limitations into account to avoid error-prone sequences by leveraging the information we have learned \cite{} about strand stability and error probability. \\
 
 \subsubsection{Homopolymers}
-\textbf{Homopolymers} are regions of a strand that solely consist of repetitions of a single base. For example, a sequence AGCTTTTTGC contains a length five homopolymer of base T. While two to six base repeats are naturally common \cite{homopolymer}, it is crucial to avoid longer homopolymers in the encoding process, as they render a strand more error-prone \cite{homopolymererrors} and unstable. \\
+\textbf{Homopolymers} are regions of a strand that solely consist of repetitions of a single base (e.g. \texttt{AGCTTTTTGC}). These are crucial to avoid, as they render a strand more error-prone \cite{homopolymererrors} and unstable. Two to six base repeats are common in natural DNA \cite{homopolymer}, but base repeats of any length can be avoided easily as discussed in subsection F.
 
 \subsubsection{GC Content}
-Another fundamental property of a DNA strand is its \textbf{GC Content}, which is defined as the ratio of Guanine and Cytosine bases to the rest of the bases in a region. Having a GC Content of around 50\% is essential to a strand's stability \cite{gccontent}. Still, it is not enough to calculate this ratio once over the entire strand because GC content also provides local stability. For example, a strand could have a subsequence GCGCGCGCTATATATATA with no homopolymers but a high error probability. \\
+GC Content in a DNA strand also contributes to the stability and error probability.  \textbf{GC Content} is the ratio of Guanine and Cytosine bases to the rest of the bases in a region. Having a GC Content of around 50\% is essential to a strand's stability \cite{gccontent}. Still, it is not enough to calculate this ratio once over the entire strand because GC content also provides local stability. For example, a strand could have a subsequence \texttt{GCGCGCGCTATATATATA} with no homopolymers but a high error probability.
 
 
 \subsubsection{Secondary Structures}
-Another check to be made is for the formation of \textbf{secondary structures}. Secondary structures form when a strand binds to itself or another partially complementary strand. For example, if an ss-DNA strand contains a region of its own reverse complement, the strand can bind to itself instead of to a separate complementary strand. Such incorrect bindings cause issues when creating physical redundancy with PCR \cite{pcr} as well as at sequencing \cite{secondarystructures}. \\
+Further stability is achieved by considering the formation of \textbf{secondary structures}. Secondary structures form when a strand binds to itself or another partially complementary strand. For example, if an ss-DNA strand contains a region of its own reverse complement, the strand can bind to itself instead of to a separate complementary strand. Such incorrect bindings cause issues when creating physical redundancy with PCR \cite{pcr} as well as at sequencing \cite{secondarystructures}.
 
 %TODO: Hairpin diagram%
 
@@ -337,16 +325,16 @@ A container of a solution containing ds-DNA molecules is called a \textbf{DNA po
 \label{randomaccess}
 \end{figure}
 
-\textbf{Random (direct) access} in a storage system is the ability to access any data fragment independently of all others. This is contrasted with sequential access, in which to access the $n$-th element, the first $n-1$ elements must have already been accessed. In order to randomly access data from a DNA library, the encoded strands and access mechanism must have the following characteristics: \\
+\textbf{Random (direct) access} in a storage system is the ability to access any data fragment independently of all others. This is contrasted with sequential access, in which to access the $n$-th element, the first $n-1$ elements must have already been accessed. In order to randomly access data from a DNA library, the encoded strands and access mechanism must have the following characteristics:
 
 \subsubsection{Uniquely Addressable}
-Each encoded strand must have a property that allows it to be uniquely addressable independently from all other strands. \\
+Each encoded strand must have a property that allows it to be uniquely addressable independently from all other strands.
 
 \subsubsection{Targetable}
-For random access, one must also be capable of targeting the individual addresses of all sequences after being identified. Targeting simply means that there must be a mechanism that "searches" for a given strand independently from its neighbors in a given DNA pool. \\ 
+For random access, one must also be capable of targeting the individual addresses of all sequences after being identified. Targeting simply means that there must be a mechanism that "searches" for a given strand independently from its neighbors in a given DNA pool.
 
 \subsubsection{Readable}
-Once the searched strand has been targeted, it must be read by some process. In the context of DNA pools, this property is given by the used sequencing technology. \\
+Once the searched strand has been targeted, it must be read by some process. In the context of DNA pools, this property is given by the used sequencing technology.
 
 
 %[1] https://www.biorxiv.org/content/10.1101/074237v3.full.pdf
@@ -354,27 +342,27 @@ Once the searched strand has been targeted, it must be read by some process. In 
 
 
 \subsection{Encoding Data into DNA}
-In order to store data in a DNA strand, one must first consider how the data can be mapped to the four available nucleotides. This process will be referred to as encoding.
+In order to store data in a DNA strand, one must first consider how the data can be mapped to the four available nucleotides. This process will be referred to as \textbf{encoding}.
 
-At first glance, one may try assigning each of the four bases a two-bit sequence, for example, A=00, C=01, T=10, G=11. This simple mapping would mean a byte like 01100011 would become transformed into the base sequence CTAG. However, depending on the data format, regions of the binary representation may often repeat themselves often. If one were to map two bits per base naively as described, this would result in highly error-prone strands due to excessive GC Content and long homopolymers, among other issues. For these reasons, three primary operations are performed on the data in the majority of previous work.
+At first glance, one may try assigning each of the four bases a two-bit sequence, for example, A=00, C=01, T=10, G=11. This simple mapping would mean a byte like \texttt{01100011} would become transformed into the base sequence \texttt{CTAG}. However, depending on the data format, regions of the binary representation may repeat themselves often. If one were to map two bits per base naively as described, this would result in highly error-prone strands due to excessive GC Content and long homopolymers, among other issues. For these reasons, XORs, Rotating Huffman Codes \cite{huffmancode}, and Erasure Codes \cite{reedsolomon} are utilized in the majority of previous work \cite{dnabasedarchival,pcrbased,pcrbased2,DORIS,chemicalhandles}.
 
 \subsubsection{XOR}
-When encoding a library of data, it must be broken into smaller chunks because costs increase prohibitively with each added base. With each added base comes more opportunities for errors to emerge, which can propagate upwards and cause failure during amplification or sequencing.
+When encoding a library of data, it must be broken into smaller chunks because cost increases prohibitively with each added base \cite{}. Additionally with each added base, more potential errors emerge \cite{}, which can propagate upwards and cause failure during amplification or sequencing.
 
-Because digital data is non-random, i.e., much of the data we want to store is repetitive and redundant, many chunked sequences would get encoded similar to each other. If this were done without care, the sequences would not bind to their respective complementary strand but rather incompletely to neighboring similar strands. Avoiding such overlaps between sequences is what is meant by maximizing the orthogonality of the strands.
+Since much of the data we want to store is repetitive and redundant, or "non-random", many chunks are mapped to similar sequences. This would lead to the sequences not binding to their respective complementary strand, but rather incompletely to similar neighboring strands. Avoiding such overlaps between sequences is what is meant by maximizing the \textbf{orthogonality} of the strands and their primers.
 
 For this reason, an extra precaution is often taken as a first step, in which the bit sequence is XOR'ed with a pseudo-randomly generated sequence which can later be recovered. This procedure ensures that two similar sequences get encoded in different ways. One can consider this as a simple hashing mechanism. Of course, this pseudo-random sequence must later be regenerated to reverse this process. The reverse operation of an XOR is itself, meaning that reversing the hash is done by performing the XOR on the encoded sequence with the same pseudo-random sequence as before.
+
+%TODO photo?%
 
 \subsubsection{Rotating Huffman Code}
 One of the most obvious improvements to make at this step would be to take lessons learned from information theory into account and ensure that the encoding does not take up more bits than necessary. Not only does this reduce costs, but it also reduces the probability of errors. As stated above, much of digital data is repetitive and redundant. For this, lossless compression using Huffman coding \cite{huffmancode} as seen in \ref{code} has been used in the vast majority of recent works.
 
 In Huffman coding, a byte sequence is separated into $n$-ary sequences, and the relative frequencies of each sequence are calculated. In our case, we use triplets of bits. A ternary tree is then generated, assigning more probable characters codes of shorter length to store data more efficiently.
 
-This process alone, however, does not remedy the problem of repetitive regions and homopolymers. For this, a rotating code is used, which guarantees that the same base is never repeated more than once. Rotating codes entail taking the previous nucleotide into account when deciding the next base. This process is implemented with a small lookup table as depicted in TODO.
+This process alone, however, does not remedy the problem of repetitive regions and homopolymers. For this, a rotating code is used, which guarantees that the same base is never repeated more than once. Rotating codes entail taking the previous nucleotide into account when deciding the next base. This process is implemented with a small lookup table as depicted in Figure 3.
 
 Combining these two methods allows for a sequence that fares relatively well in reducing homopolymer count and keeping GC content at around 50\%.
-
-
 
 \begin{figure}
 \centering
@@ -389,12 +377,12 @@ Combining these two methods allows for a sequence that fares relatively well in 
 \label{code}
 \end{figure}
 
-\subsection{Erasure Codes}
-Due to high error rates when reading the DNA, there must be logical and physical redundancy to recover the data correctly. Physical redundancy comes from PCR discussed in the next section. The logical redundancy is commonly \cite{} implemented with erasure codes. Using an erasure code, the data sequence is transformed into a longer sequence that can be successfully decoded with only a subset of the characters from the encoding.
+\subsubsection{Erasure Codes}
+Due to high error rates when reading the DNA, there must be logical and physical redundancy to recover the data correctly. Physical redundancy is mainly implemented through creating multiple copies of each DNA strand as discussed in section X. The logical redundancy is commonly \cite{} implemented with erasure codes. Using an erasure code, the data sequence is transformed into a longer sequence that can be successfully decoded with only a subset of the characters from the encoding.
 
-In current DNA libraries, the redundancy parameter is tuned relatively high \cite{pcrbased}, which significantly reduces the achieved information density. However, as sequencing technology improves, the redundancy parameter should be able to be tuned down \cite{pcrbased} due to lower read errors and improved encoding schemes which are aware of and avoid secondary structure formation and other restrictions.
+In current DNA libraries, the redundancy parameter is tuned relatively high \cite{pcrbased}, which significantly reduces the achieved information density. However, as sequencing technology improves, the redundancy parameter should be able to be tuned down \cite{pcrbased} due to lower read errors and improved encoding schemes which avoid secondary structure formation and other restrictions.
 
-In the works we will discuss the most common erasure code used is the Reed-Solomon code \cite{reedsolomoncode}. The Reed-Solomon code is a type of erasure code comprised of an inner and outer redundancy component. This technique has been widely adopted in digital systems and results in massive gains regarding the recoverability of data and the correction of errors \cite{}.
+The most commonly referenced and practically used erasure code is the Reed-Solomon code \cite{reedsolomoncodes}. The Reed-Solomon code is a type of erasure code comprised of an inner and outer redundancy component. This technique has been widely adopted in digital systems and results in massive gains through data recoverability and error correction \cite{}.
 
 
 
@@ -407,22 +395,23 @@ In the works we will discuss the most common erasure code used is the Reed-Solom
 
 \subsection{Introduction to PCR}
 
-After the data has been mapped to a DNA strand, it is time to synthesize the sequences and prepare them for storage. One phase of this preparation often involves PCR (Polymerase Chain Reaction), in which each DNA sequence is multiplied millions of times. PCR is essential to create physical redundancy as well as a random access mechanism, which will be discussed in more detail later. Once data is encoded into a strand as partially described above, a so-called primer is appended to the sequence. This primer will serve as a marker of the region to be copied by an enzyme DNA polymerase. This copying, also called amplification, occurs in cycles involving the following steps. \\
+After the data has been mapped to a DNA strand, it is time to synthesize the sequences and prepare them for storage. One phase of this preparation often involves \textbf{PCR} (Polymerase Chain Reaction), in which each DNA sequence is multiplied millions of times. PCR is essential to create physical redundancy as well as a random access mechanism, which will be discussed in more detail in section II. Once data is encoded into a strand as partially described above, a so-called primer is appended to the sequence. This primer will serve as a marker of the region to be copied by an enzyme DNA polymerase. This copying, also called \textbf{amplification}, is repeated in cycles involving the following steps. \\
 
 \subsubsection{Denaturation}
-In a process called denaturation, DNA molecules are split up into their two complementary strands by being heated to a target temperature $T_m$, called the \textit{melting point}. This melting point is determined by the temperature where 50\% of the DNA strands separate. This separation occurs because the heat breaks the hydrogen bonds holding the two strands together. This step is necessary in order to allow the complementary primer sequences to attach to each strand. \\
+In a process called denaturation, DNA molecules are split up into their two complementary strands by being heated to a target temperature $T_m$, called the \textit{melting point}. This melting point is determined by the temperature where 50\% of the DNA strands separate. This separation occurs because the heat breaks the hydrogen bonds holding the two strands together. This step is necessary in order to allow the complementary primer sequences to attach to each strand.
 
 \subsubsection{Annealing}
-Once the DNA molecules are split, the environment is cooled back down in a process called annealing. Since the strands are not bound to anything anymore, there is room for the primer sequences to bind to the complementary primer regions we appended to our data-holding DNA strand.\\
+Once the DNA molecules are split, the environment is cooled back down in a process called annealing. Since the strands are not bound to anything anymore, there is room for the primer sequences to bind to the complementary primer regions we appended to our data-holding DNA strand.
 
 \subsubsection{Extension}
-The DNA polymerase enzyme now finds the primers added in the last step and fills up the other side of the double-helix by adding free nucleotides from the solution one by one.\\
+The DNA polymerase enzyme now finds the primers added in the last step and fills up the other side of the double-helix by adding free nucleotides from the solution one by one.
 
 \subsubsection{Repetition}
-Now that the polymerase has recreated the original double-helix, the process can cycle, restarting at the denaturation step. The number of copies doubles with each step, allowing for rapid growth.\\
+Now that the polymerase has recreated the original double-helix, the process can cycle, restarting at the denaturation step. The number of copies doubles with each step, allowing for rapid growth.
 
 \section{Current Random Access Techniques}
-In the next section, we will explore three recent breakthroughs in random access for DNA storage. The main bottleneck regarding the scalability of random access to date has been the retrieval mechanism, which currently poses a much larger optimization problem than the encoding schemes. In particular, improving upon storage architectures reduces the need for high redundancy and overly robust encoding procedures, as these mainly serve to reduce the problems that the mechanism itself poses. The current available random access mechanisms heavily rely on good primer/address design, orthogonality of the encoded sequences, physical separation of the data, and the amount of data in each storage unit.
+In this section, we explore three recent breakthroughs in random access for DNA storage. 
+Scalability of random access is limited mostly by the targeting mechanism. Encoding schemes mostly focus on addresses. However, random access scalability is still limited by a much larger optimization problem than encoding schemes can solve alone. In particular, improving upon storage architectures and sequencing technology reduces the need for high redundancy and overly robust encoding procedures. The currently available random access mechanisms heavily rely on good primer and address design, orthogonality of the encoded sequences, physical separation of the data, and the amount of data in each storage unit.
 
 
 \begin{figure}[!t]
@@ -434,30 +423,32 @@ In the next section, we will explore three recent breakthroughs in random access
 
 
 \subsection{PCR Based Random Access}
-The most basic form of random access in a DNA library can be achieved by separating files into fragments, which all receive a different PCR primer it can be identified by. Because this primer is stored in-silico, one can later re-amplify the solution containing a specific DNA fragment on retrieval. The amplification makes the sequence stand at sequencing of the DNA pool, where one sees the relative frequencies of all sequenced fragments. While this may not sound like valid random access since all data fragments are read at once, one must note that for a full read, many passes are required over the same sequence. These multiple passes are required to average out sequencing errors such as deletions, substitutions, and additions.
+The most basic form of random access in a DNA library can be achieved by separating files into fragments. After encoding, each fragment's respective DNA is appended to a unique PCR primer, which functions as the fragment's address. Because this primer is stored in-silico, one can later re-amplify the solution containing a specific DNA fragment on retrieval. The amplification makes the sequence stand out at sequencing of the DNA pool, where one sees the relative frequencies of all sequenced fragments. This may not sound like valid random access, since all data fragments are read at once. But one must note that for a full read, many passes are required over the same sequence. These multiple passes are required so that sequencing errors such as deletions, substitutions, and additions, are averaged out \cite{}.
 
-In addition, primer design is a delicate task, and the amount of primers that can be used is often severely limited \cite{}. As a result, most papers employ custom primer design, which is difficult, as each primer must be experimentally verified before use. This limitation is partially alleviated by breaking up a dataset into $n$ physically separated DNA pools, allowing reuse of the primers and linearly scaling direct access capability up to a certain threshold.
+Additionally, primer design is a delicate task, and the amount of primers that can be used is often severely limited \cite{}. As a result, most prior works employ custom primer design, which is difficult, as each primer must be experimentally verified before use. This limitation is partially alleviated by breaking up a dataset into $n$ physically separated DNA pools. This allows for the reuse of the primers and linearly scaling direct access capability up to a certain threshold.
 
-In previous works \cite{pcrbased} random access was performed by separating the database into $n$ DNA pools, each with a given amount $k$ of amplified DNA fragments. Each of the $k$ fragments has a unique primer used for PCR amplification, which is reused as the address to later amplify and retrieve the correct fragment. The "targetable" characteristic is given by amplifying the strand to be sequenced, effectively increasing the sequencing signal compared to the net combination of the signals from all other adjacent strands. Doing this is required because sequencing technology is indifferent to which strands we have targeted and amplified, as it will read all stands in a sample regardless. However, because the desired strand has been amplified using its primer as an address, it can be differentiated from the other sequences and decoded successfully.
+Previously \cite{pcrbased}, random access was performed by separating the database into $n$ DNA pools, each with a given amount $k$ of amplified DNA fragments. Each of the $k$ fragments has a unique primer used for PCR amplification. This is then reused as the address to later amplify and retrieve the correct fragment. The "targetable" characteristic as previously mentioned is achieved by amplification of the strand to be sequenced. This effectively increases the sequencing signal compared to the net combination of the signals from all other adjacent strands. This is required, since sequencing technology is insensitive to which strands are targeted and amplified. That is, all strands in a sample are read indiscriminately.
 
-Note that the scalability of this strategy depends on the number of available primers, as these can only be reused once per pool for truly individually addressable files. This is the case for various reasons. For one, as discussed above, each random access requires sequencing of the entire DNA pool since the targeted strands are not physically separated from the others. Any unamplified strands in the sample are destroyed upon sequencing, which dwindles their total supply over time. In addition, the quantity of information stored in a pool does not scale forever with the number of primers, even in cases of excellent primer design systems \cite{}. Essentially, the more sequences one adds to a pool, the more PCR cycles are needed to increase the signal of the queried strand high enough to perform a correct read. Finally, since PCR cycles involve repetitions of denaturation and annealing, any similarities between stored sequences will propagate errors due to unwanted interference through incorrect bindings and formations of secondary structures.
+% However, because the desired strand has been amplified using its primer as an address, it can be differentiated from the other sequences and decoded successfully. %
+
+Note that the scalability of this approach depends on the number of available primers, as these can only be reused once per pool for truly individually addressable files. For one, as discussed above, each random access requires sequencing of the entire DNA pool since the targeted strands are not physically separated from the others. Any unamplified strands in the sample are destroyed upon sequencing, which dwindles their total supply over time. In addition, the quantity of information stored in a pool does not scale forever with the number of primers, even in cases of excellent primer design systems \cite{}. Essentially, the more sequences one adds to a pool, the more PCR cycles are needed to increase the signal of the queried strand high enough to perform a correct read. Finally, since PCR cycles involve repetitions of denaturation and annealing, any similarities between stored sequences will propagate errors due to unwanted interference and formations of secondary structures.
+
+In \cite{pcrbased2}, Yazdi et al. implement such a system, focusing on maximizing fragment length to minimize read errors instead of using shorter sequence lengths with higher redundancy. Because they had longer information strings in each sequence (1000bps), they were able to reach a higher information density of $4.9 \times 10^{20}$ B/g. They argue, "Instead of storing blocks mimicking the structure and length of reads generated during high-throughput sequencing, we synthesized blocks of length 1000bps tagged at both ends by specially designed address sequences. Adding addresses to short blocks of length 100bps would incur a large storage overhead, while synthesizing blocks longer than 1000bps using current technologies is prohibitively costly."
+
+However, the scale of this experiment must be considered. Only six Wikipedia articles were stored, comprising in total only 17Kbs of data. This inherently lessens error rates, even considering their specially crafted encoding scheme. Therefore, these results must be replicated on a larger scale to make significant conclusions. 
 
 In \cite{pcrbased}, Organick et al. encoded and stored over 200MB of data spanning across 35 distinct files, each of which were recovered individually and without errors using PCR-based random access. The main innovation presented in their work was showing the scalability of the PCR-based random access technique and creating a new algorithm to reduce the read coverage needed at sequencing. The new algorithm made it more practical to access a file from a pool by reducing the number of needed PCR cycles to amplify the queried data. This additionally reduced the damage done to neighboring sequences. Notably, their team was the first to prove that random access could be scaled up to a library size of 200MB and theoretically much higher.
 
 Their DNA library consisted of more than 13 million DNA oligos in total. They encoded each digital file into megabyte-sized blocks before encoding, appending the file address (PCR primer) to each block, then applying a Reed-Solomon Code. Before the data blocks were transformed to nucleotides, an outer code was applied that added new blocks to the file containing redundant information. After this, an inner code is generated and applied to each bit sequence. In this process, the bit string is translated into the encoded bases with added redundancy. 
 
-To reduce the number of needed cycles before sequencing, they also introduced an algorithm based on bitwise majority alignment (BMA), allowing one to cluster the data from the noisy sequencing reads more efficiently. This consists of four stages which will not be discussed here. The team tested their algorithm with both Illumina sequencing and micropore sequencing technologies, although Illumina sequencing was the primary sequencing technology used for retrievals.
-
-In \cite{pcrbased2}, Yazdi et al. implement a comparable system, except with a focus on maximizing block length to diminish read errors instead of using shorter sequence lengths with higher redundancy. Because they had longer information strings in each sequence (1000bps), they were able to reach a higher information density of $4.9 \times 10^{20}$ B/g. They argue, "Instead of storing blocks mimicking the structure and length of reads generated during high-throughput sequencing, we synthesized blocks of length 1000bps tagged at both ends by specially designed address sequences. Adding addresses to short blocks of length 100bps would incur a large storage overhead, while synthesizing blocks longer than 1000bps using current technologies is prohibitively costly."
-
-In contrast to \cite{pcrbased}, \cite{pcrbased2} supported the rewriting of data. However, the scale of this experiment must be considered. Only six Wikipedia articles were stored, comprising in total only 17Kbs of data. This inherently lessens error rates, even considering their specially crafted encoding scheme. Therefore, these results must be replicated on a larger scale to make significant conclusions. 
+To reduce the number of needed cycles before sequencing, they also introduced an algorithm based on bitwise majority alignment (BMA), allowing one to cluster the data from the noisy sequencing reads more efficiently. The team tested their algorithm with both Illumina sequencing and micropore sequencing technologies. Illumina sequencing was the primary sequencing technology used for retrievals.
 
 \subsubsection{Limitations}
-Because there are typically around a maximum of 10 primers per DNA pool \cite{}, there is a limit of $10n$ individually addressable distinct data fragments. In addition, the mapping of key-value pairs and a mapping of the file to its respective DNA pool location must be stored in-silico for later retrieval. Unfortunately, one cannot easily scale the number of primers since their design is computationally tricky. Not only this, but error rates snowball with each additional primer added to a pool since they must all be optimally orthogonal to each other in order to reduce the chance of catastrophic failure or incorrect addressing.
+Because there are typically around a maximum of 10 primers per DNA pool \cite{}, there is a limit of $10n$ individually addressable distinct data fragments. In addition, the mapping of key-value pairs and a mapping of the file to its respective DNA pool location must be stored in-silico for later retrieval. Unfortunately, one cannot easily scale the number of primers since their design is computationally tricky. Not only this, but error rates snowball with each additional primer added to a pool since they must all be optimally orthogonal to each other in order to reduce the chance of failure or incorrect addressing.
 
-These limitations suggest that although PCR-based random access has scaled well as a first-generation random access system and is quite robust, it cannot scale strongly enough to compete with traditional storage mediums. This is especially the case when one considers that there needs to be a physical copy of each DNA pool, and the number of times random access to a DNA pool can be carried out is limited by the number of physical copies that exist.
+These limitations suggest that although PCR-based random access has initially scaled well and is robust, it cannot keep this up indefinitely or be physically scaled down small enough to realistically compete with traditional storage mediums. This is because there needs to be a physical copy of each DNA pool, and the number of times random access to a DNA pool can be carried out is limited by the number of physical copies that exist.
 
-A general problem caused by PCR-based random access is that its operations are destructive. Because there is no real separation of data upon reading from a pool, data that is not being addressed will be sequenced and thus destroyed upon reading. Additionally, only the directly accessed data is amplified using PCR, meaning that reads dwindle the supply of less-often accessed data. Most works using PCR-based random access use sequencing techniques that destroy the targeted sequence as well as the sequences that are not being accessed.
+A general problem caused by PCR-based random access is that its operations are destructive. Because there is no real separation of data upon reading from a pool, data that is not being addressed will be sequenced and thus destroyed upon reading. Additionally, only the directly accessed data is amplified using PCR, meaning that reads dwindle the supply of less-often accessed data.
 
 \subsection{Random Access using Chemical Handles}
 
@@ -472,7 +463,9 @@ The first most considerable improvement to be made to the previously mentioned P
 
 In \cite{chemicalhandles}, Tomek et al. took on this issue inspired by \cite{chemicalhandles} work with TODO. They achieved this goal with the use of primers containing chemical handles. The primers contain identical nucleotides as before, so the main difference is that they are sequenced with a modification such that a magnetizable chemical is attached to one of the ends of the sequence. Thus, the original data pool is subjected to fewer PCR cycles upon random access, notably less than a PCR-only-based approach. Minuscule magnetic beads are then added to the sample, which attract the modified primers. These magnetic beads allow for the removal of the queried sequences so that the rest of the sequences in the original DNA pool are mainly left unaffected.
 
-Tomek et al. also made use of nested primers. They created a system where not only one primer was used to address a sequence, but rather multiple. Each address remains unique, however, because the ordering of the primers is different for each sequence. This system increases the maximum system capacity significantly, albeit extending the header size. TODO why? These headers are generated with a hierarchical system instead of appending each other in a random permutation. The hierarchical system works as follows:  todo.
+Tomek et al. also made use of nested primers. They created a system where not only one primer was used to address a sequence, but rather multiple. Each address remains unique, however, because the ordering of the primers is different for each sequence. This system increases the maximum system capacity significantly \cite{chemicalhandles}, albeit extending the header size. These headers are generated with a hierarchical system instead of appending each other in a random permutation.
+
+%TODO: Write more about the hierarchical system%
 
 However, this specific approach only encoded five separate files, each split up into blocks of 200 bp each. Nonetheless, they also mixed in background DNA to simulate an environment of 5TB. However, these background data strands did not contain encoded information and could not simulate unwanted interaction between similar strands during PCR.
 
@@ -527,8 +520,6 @@ It has yet to be tested how the hierarchical primer approach compares to the cus
 
 Once the RNA polymerase technique is sufficiently experimentally verified to relieve problems posed by PCR-based random access in practice, new optimization targets can be set for further research. In particular, the viability of RNA polymerase-based approaches can be improved upon by further optimizing the re-usability of the system. This could be ameliorated by experimenting with different promoters, chemical handles, and the general methods for magnetic extraction and returning the sequences to their original DNA pool. 
 
-One thing is clear: for large one-pot storage of information-bearing DNA strands, a PCR-based approach cannot scale. 
-
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
@@ -553,13 +544,14 @@ One thing is clear: for large one-pot storage of information-bearing DNA strands
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
-
+\bibitem{first}
+Gibson, Daniel G., et al. "Creation of a bacterial cell controlled by a chemically synthesized genome." science 329.5987 (2010): 52-56.
+\bibitem{theoreticaldensity}
+Church, George M., Yuan Gao, and Sriram Kosuri. "Next-generation digital information storage in DNA." Science 337.6102 (2012): 1628-1628.
 \bibitem{globaldatagrowth}
 Reinsel, D., Gantz, J. & Rydning, J. Data age 2025: the digitization of the world from edge to core. Idc (2018).
 \bibitem{dnabasedarchival}
 Bornholt, James, et al. "A DNA-based archival storage system." Proceedings of the Twenty-First International Conference on Architectural Support for Programming Languages and Operating Systems. 2016.
-\bibitem{theoreticaldensity}
-Church, George M., Yuan Gao, and Sriram Kosuri. "Next-generation digital information storage in DNA." Science 337.6102 (2012): 1628-1628.
 \bibitem{realistictheoreticaldensity}
 Wang, Y., Noor-A-Rahim, M., Zhang, J. et al. High capacity DNA data storage with variable-length Oligonucleotides using repeat accumulate code and hybrid mapping. J Biol Eng 13, 89 (2019)
 \bibitem{doublehelix}
@@ -586,6 +578,8 @@ Kubista, Mikael, et al. "The real-time polymerase chain reaction." Molecular asp
 Dong, Fang, et al. "Secondary structure prediction and structure-specific sequence analysis of single-stranded DNA." Nucleic acids research 29.15 (2001): 3248-3257.
 \bibitem{gccontent}
 Yair Benita, Ronald S. Oosting, Martin C. Lok, Michael J. Wise, Ian Humphery‐Smith, Regionalized GC content of template DNA as a predictor of PCR success, Nucleic Acids Research, Volume 31, Issue 16, 15 August 2003, Page e99, https://doi.org/10.1093/nar/gng101
+\bibitem{dnaevolution}
+White, W. Timothy J., Bojian Zhong, and David Penny. "Beyond reasonable doubt: Evolution from dna sequences." PLoS One 8.8 (2013): e69924.
 \end{thebibliography}
 
 
